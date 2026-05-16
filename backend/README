@@ -1,0 +1,74 @@
+STEP 13 — POSTMAN TESTING
+
+We will test in this order:
+
+1. Signup
+
+POST
+
+http://localhost:5000/api/auth/signup
+
+Body → JSON:
+
+{
+  "name": "John",
+  "email": "john@gmail.com",
+  "password": "123456"
+}
+2. Login
+
+POST
+
+http://localhost:5000/api/auth/login
+
+Body:
+
+{
+  "email": "john@gmail.com",
+  "password": "123456"
+}
+
+👉 Copy token from response
+
+3. Create Student
+
+POST
+
+http://localhost:5000/api/students
+
+Headers:
+
+Authorization: YOUR_TOKEN_HERE
+
+Body:
+
+{
+  "name": "Alice",
+  "age": 20,
+  "course": "MERN"
+}
+4. Get All Students
+
+GET
+
+http://localhost:5000/api/students
+
+Header:
+
+Authorization: YOUR_TOKEN_HERE
+5. Update Student
+
+PUT
+
+http://localhost:5000/api/students/:id
+
+Body:
+
+{
+  "course": "Full Stack Development"
+}
+6. Delete Student
+
+DELETE
+
+http://localhost:5000/api/students/:id
