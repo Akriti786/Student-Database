@@ -6,7 +6,16 @@ const connectDB = require("./config/db");
 
 const app = express();
 
-app.use(cors());
+dotenv.config();
+
+connectDB();
+
+app.use(cors({
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true
+}));
+
 app.use(express.json());
 
 app.use("/api/auth", require("./routes/authRoutes"));
@@ -16,10 +25,8 @@ app.get("/", (req, res) => {
     res.send("Api Running...");
 });
 
-
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
     console.log(`Server running on the port ${PORT}`);
-
 });
