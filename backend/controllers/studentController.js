@@ -1,0 +1,96 @@
+const Student = require("../models/Student");
+
+
+// CREATE STUDENT
+exports.createStudent = async (req, res) => {
+    try {
+        const student = await Student.create({
+            ...req.body,
+            userId: req.user.id
+        });
+
+        res.status(201).json(student);
+    } catch (err) {
+        res.status(500).json({
+            message: "Error creating student",
+            error: err.message
+        });
+    }
+};
+
+
+// GET STUDENTS
+exports.getStudents = async (req, res) => {
+    try {
+        const students = await Student.find({ userId: req.user.id });
+        res.json(students);
+    } catch (err) {
+        res.status(500).json({
+            message: "Error fetching students",
+            error: err.message
+        });
+    }
+};
+
+
+// UPDATE STUDENT
+exports.updateStudent = async (req, res) => {
+    try {
+        const updated = await Student.findOneAndUpdate(
+            { _id: req.params.id, userId: req.user.id },
+            req.body,
+            { new: true }
+        );
+
+        if (!updated) {
+            return res.status(404).json({ message: "Student not found" });
+        }
+
+        res.json(updated);
+    } catch (err) {
+        res.status(500).json({
+            message: "Error updating student",
+            error: err.message
+        });
+    }
+};
+
+
+// DELETE ONE STUDENT
+exports.deleteStudent = async (req, res) => {
+    try {
+        const deleted = await Student.findOneAndDelete({
+            _id: req.params.id,
+            userId: req.user.id
+        });
+
+        if (!deleted) {
+            return res.status(404).json({ message: "Student not found" });
+        }
+
+        res.json({ message: "Student deleted successfully" });
+    } catch (err) {
+        res.status(500).json({
+            message: "Error deleting student",
+            error: err.message
+        });
+    }
+};
+
+
+// DELETE ALL STUDENTS
+exports.deleteAllStudents = async (req, res) => {
+    try {
+        const result = await Student.deleteMany({ userId: req.user.id });
+
+        res.json({
+            message: "All students deleted successfully",
+            deletedCount: result.deletedCount
+        });
+    } catch (err) {
+        res.status(500).json({
+            message: "Error deleting all students",
+            error: err.message
+        });
+    }
+};
